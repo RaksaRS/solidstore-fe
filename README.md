@@ -1,53 +1,24 @@
+# Overview
+
+This is the code for the frontend of my cloud storage app. The backend can be found [here](https://github.com/RaksaRS/solidstore-be).
+
 # UI
 
-Light: ![](./public/app-light.png)
-Dark: ![](./public/app-light.png)
-
-# Architecture
-
-Each file/folder record in the database has the following columns:
-
-- ID
-- Name
-- Type (folder/file)
-- Owner
-- Date created
-- Date updated
-- Dir (the directory containing this file/folder)
-- Content (an ID referencing the ID in object storage)
-
-The directory that the user is currently in, is reflected in a URL segment. This enables bookmarking
+Light (Figma design): ![](./public/app-light.png)
+Dark (Figma design): ![](./public/app-light.png)
 
 # Functionality
 
-- Navigation
-- Current directory
-- Search
-- CRUD
-- Login, logout : Auth0
+- By itself, the website runs on HTTP, but in development, I was able to get it running HTTPS by using [Caddy server](https://caddyserver.com/). HTTPS is recommended if Auth0 is used to ensure bugs don't persist.
+- Folder Navigation
+- Folder/file creation/deletion
+- Authentication implemented via Auth0
+- Dark mode
+- Most components are React Server Components
 
-Future:
+Back-end architecture can be found [here](https://github.com/RaksaRS/solidstore-be).
 
-- File/folder sharing & permissions
+### Current Issues:
 
-## Navigation
-
-### Navigation by clicking
-
-Append to the existing breadcrumb
-
-### Navigation by selecting a breadcrumb
-
-Suppose we have a list of breadcrumbs: b0 (or Home), b1, b2, ..., bn. If the user selects some bi, then we simply remove all the breadcrumbs starting at the one right after bi
-
-### Navigation by back & forward arrows in history
-
-Is automatically done by Next.js
-
-### Navigation by explicit URL (i.e. from bookmarks or manual typing, or perhaps file sharing)
-
-First of all, a GET request must always be used. One way to optionally include breadcrumbs is via a flag in query parameters. However, doing so would open the window for malicious users to always do a GET with the breacrumbs flag on a public file/folder. If such a file/folder is famous & frequently accessed by normal users, performance could degrade because of the breadcrumbs overhead that malicious users query. On top of this, breadcrumbs are generated via DB queries.
-
-Secondly, a separation of concerns is always good. In the future, breadcrumbs of a file may be requested independently.
-
-So, it's best to make an entirely different route.
+- Users can't change accounts: After calling /api/logout, the session cookie remains in the browser, and on the next visit, the user is logged in automatically using this session, which prevents users from logging in with different credentials
+- Dark mode isn't fully functional yet
