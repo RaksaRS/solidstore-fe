@@ -44,7 +44,7 @@ async function getBackendAccessToken() {
   };
 
   const { access_token: accessToken } = await fetch(
-    "https://dev-7evmxvmnal26wubc.us.auth0.com/oauth/token",
+    `${process.env.AUTH0_ISSUER_BASE_URL}/oauth/token`,
     {
       headers: headers,
       method: "POST",
@@ -60,17 +60,6 @@ async function getBackendAccessToken() {
   return backendAccessToken;
 }
 
-async function fetchWithAuthFromClient(url: string, options: RequestInit) {
-  "use server";
-  const headers = new Headers(options.headers);
-  headers.set("Authorization", `Bearer ${await getApiAccessToken()}`);
-  options.headers = headers;
-  const res = await fetch(url, options);
-  return {
-    res: res,
-  };
-}
-
 async function fetchWithAuthFromServer(url: string, options: RequestInit) {
   const headers = new Headers(options.headers);
   headers.set("Authorization", `Bearer ${await getBackendAccessToken()}`);
@@ -78,4 +67,4 @@ async function fetchWithAuthFromServer(url: string, options: RequestInit) {
   return fetch(url, options);
 }
 
-export { fetchWithAuthFromClient, fetchWithAuthFromServer };
+export { fetchWithAuthFromServer };
