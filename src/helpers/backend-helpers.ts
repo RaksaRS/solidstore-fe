@@ -2,6 +2,7 @@ let backendAccessToken: string;
 
 async function getApiAccessToken() {
   if (backendAccessToken) {
+    // The body of the if statement here checks the access token is still valid
     const headers = new Headers();
     let isValid = true;
     headers.set("Authorization", `Bearer ${backendAccessToken}`);
@@ -27,6 +28,8 @@ async function getApiAccessToken() {
 
     if (isValid) return backendAccessToken;
   }
+
+  // The below code tries to obtain an access token
 
   // Setup headers
   const headers = new Headers();
