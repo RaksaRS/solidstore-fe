@@ -1,6 +1,6 @@
 let backendAccessToken: string;
 
-async function getApiAccessToken() {
+async function getBackendAccessToken() {
   if (backendAccessToken) {
     // The body of the if statement here checks the access token is still valid
     const headers = new Headers();
@@ -73,7 +73,7 @@ async function fetchWithAuthFromClient(url: string, options: RequestInit) {
 
 async function fetchWithAuthFromServer(url: string, options: RequestInit) {
   const headers = new Headers(options.headers);
-  headers.set("Authorization", `Bearer ${await getApiAccessToken()}`);
+  headers.set("Authorization", `Bearer ${await getBackendAccessToken()}`);
   options.headers = headers;
   return fetch(url, options);
 }
